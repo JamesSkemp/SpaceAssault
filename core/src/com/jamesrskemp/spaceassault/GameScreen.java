@@ -13,6 +13,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
@@ -31,7 +32,7 @@ public class GameScreen implements Screen {
 	private TextureRegion playerShipImage;
 	private Actor playerShip;
 
-	private Vector3 lastTouchPosition;
+	private Vector3 lastTouchPosition = new Vector3();
 
 	public GameScreen(final SpaceAssaultGame game) {
 		this.game = game;
@@ -58,8 +59,9 @@ public class GameScreen implements Screen {
 				return true;
 			}
 		});
+		playerShip.setPosition((Gdx.graphics.getWidth() - playerShip.getWidth()) / 2, (Gdx.graphics.getHeight() - playerShip.getHeight()) / 2);
 
-		lastTouchPosition = new Vector3();
+		stage.addActor(playerShip);
 	}
 
 	@Override
@@ -85,6 +87,8 @@ public class GameScreen implements Screen {
 			camera.unproject(lastTouchPosition);
 			playerShip.setX(MathUtils.clamp(lastTouchPosition.x - playerShip.getWidth() / 2, 0, 800 - (playerShip.getWidth())));
 			playerShip.setY(MathUtils.clamp(lastTouchPosition.y - playerShip.getHeight() / 2, 0, 480 - playerShip.getHeight()));
+			stage.act(Gdx.graphics.getDeltaTime());
+			stage.draw();
 			Gdx.app.log(TAG, "Touch: <" + lastTouchPosition.x + "," + lastTouchPosition.y + ">");
 			Gdx.app.log(TAG, "Ship: <" + playerShip.getX() + "," + playerShip.getY() + ">");
 		}
@@ -92,7 +96,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void show() {
-		stage.addActor(playerShip);
 		// TODO start music, if any is added.
 	}
 
