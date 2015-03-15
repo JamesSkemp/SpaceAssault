@@ -31,7 +31,8 @@ public class GameScreen implements Screen {
 	private Vector2 playerShipVelocity = new Vector2();
 	private Vector2 playerShipDirection = new Vector2();
 	private Vector2 playerShipMovement = new Vector2();
-	private float playerShipSpeed = 100;
+	private float playerShipSpeed = 50f;
+	private boolean moveShip;
 
 	private Vector3 lastTouchPosition = new Vector3();
 
@@ -52,11 +53,6 @@ public class GameScreen implements Screen {
 		/*
 		playerShip = new Actor() {
 			@Override
-			public void draw(Batch batch, float parentAlpha) {
-				batch.draw(playerShipImage, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
-			}
-
-			@Override
 			public void act(float delta) {
 				Gdx.app.log(TAG, "Ship acting.");
 				playerShipPosition.set(playerShip.getX(), playerShip.getY());
@@ -73,7 +69,6 @@ public class GameScreen implements Screen {
 				}
 			}
 		};
-		playerShip.setBounds(playerShip.getX(), playerShip.getY(), playerShipImage.getRegionWidth(), playerShipImage.getRegionHeight());
 		playerShip.addListener(new InputListener() {
 			@Override
 			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -82,8 +77,6 @@ public class GameScreen implements Screen {
 			}
 		});
 		playerShip.setPosition((Gdx.graphics.getWidth() - playerShip.getWidth()) / 2, (Gdx.graphics.getHeight() - playerShip.getHeight()) / 2);
-
-		stage.addActor(playerShip);
 		*/
 	}
 
@@ -104,13 +97,36 @@ public class GameScreen implements Screen {
 		game.batch.draw(playerShipImage, playerShip.getX(), playerShip.getY());
 		game.batch.end();
 
+		if (moveShip) {
+			playerShipPosition.set(playerShip.getX(), playerShip.getY());
+			playerShipDirection.set(lastTouchPosition.x, lastTouchPosition.y).sub(playerShipPosition).nor();
+			Gdx.app.log(TAG, "Ship direction: <" + playerShipDirection.x + "," + playerShipDirection.y + ">");
+
+			playerShipVelocity.set(playerShipDirection).scl(playerShipSpeed);
+			playerShipMovement.set(playerShipVelocity).scl(delta);
+			if (playerShipPosition.dst2(lastTouchPosition.x, lastTouchPosition.y) > playerShipMovement.len2()) {
+				Gdx.app.log(TAG, "Ship acting to add.");
+				Gdx.app.log(TAG, "Ship old position: <" + playerShipPosition.x + "," + playerShipPosition.y + ">");
+				playerShipPosition.add(playerShipMovement);
+				Gdx.app.log(TAG, "Movement: <" + playerShipMovement.x + "," + playerShipMovement.y + ">");
+				Gdx.app.log(TAG, "Ship new position: <" + playerShipPosition.x + "," + playerShipPosition.y + ">");
+			} else {
+				Gdx.app.log(TAG, "Ship acting to set.");
+				playerShipPosition.set(lastTouchPosition.x, lastTouchPosition.y);
+				moveShip = false;
+			}
+			playerShip.setX(playerShipPosition.x);
+			playerShip.setY(playerShipPosition.y);
+		}
+
 		if (Gdx.input.isTouched()) {
 			lastTouchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(lastTouchPosition);
-			playerShip.setX(MathUtils.clamp(lastTouchPosition.x - playerShip.getWidth() / 2, 0, 800 - (playerShip.getWidth())));
-			playerShip.setY(MathUtils.clamp(lastTouchPosition.y - playerShip.getHeight() / 2, 0, 480 - playerShip.getHeight()));
+			//playerShip.setX(MathUtils.clamp(lastTouchPosition.x - playerShip.getWidth() / 2, 0, 800 - (playerShip.getWidth())));
+			//playerShip.setY(MathUtils.clamp(lastTouchPosition.y - playerShip.getHeight() / 2, 0, 480 - playerShip.getHeight()));
 			Gdx.app.log(TAG, "Touch: <" + lastTouchPosition.x + "," + lastTouchPosition.y + ">");
 			Gdx.app.log(TAG, "Ship: <" + playerShip.getX() + "," + playerShip.getY() + ">");
+			moveShip = true;
 		}
 	}
 
