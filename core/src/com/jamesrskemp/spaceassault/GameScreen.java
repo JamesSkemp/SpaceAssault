@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
@@ -14,6 +15,8 @@ import com.badlogic.gdx.math.Vector3;
  * Created by James on 3/15/2015.
  */
 public class GameScreen implements Screen {
+	public static final String TAG = GameScreen.class.getName();
+
 	final SpaceAssaultGame game;
 
 	private OrthographicCamera camera;
@@ -62,8 +65,10 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isTouched()) {
 			lastTouchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(lastTouchPosition);
-			playerShip.x = lastTouchPosition.x - playerShip.width / 2;
+			playerShip.x = MathUtils.clamp(lastTouchPosition.x - playerShip.width / 2, 0, 800 - (playerShip.width));
 			playerShip.y = lastTouchPosition.y - playerShip.height / 2;
+			//Gdx.app.log(TAG, "Touch: <" + lastTouchPosition.x + "," + lastTouchPosition.y + ">");
+			//Gdx.app.log(TAG, "Ship: <" + playerShip.x + "," + playerShip.y + ">");
 		}
 	}
 
