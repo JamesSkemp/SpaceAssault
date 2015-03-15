@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 
@@ -38,6 +40,7 @@ public class GameScreen implements Screen {
 		camera.setToOrtho(false, 800, 480);
 
 		stage = new Stage(new StretchViewport(800, 480));
+		Gdx.input.setInputProcessor(stage);
 
 		playerShipAtlas = new TextureAtlas(Gdx.files.internal("SpaceAssaultPlayer.pack"));
 		playerShipImage = playerShipAtlas.findRegion("playerShip3_blue");
@@ -48,6 +51,13 @@ public class GameScreen implements Screen {
 			}
 		};
 		playerShip.setBounds(playerShip.getX(), playerShip.getY(), playerShipImage.getRegionWidth(), playerShipImage.getRegionHeight());
+		playerShip.addListener(new InputListener() {
+			@Override
+			public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+				Gdx.app.log(TAG, "Ship touched. <" + x + "," + y + ">");
+				return true;
+			}
+		});
 
 		lastTouchPosition = new Vector3();
 	}
