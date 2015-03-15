@@ -8,13 +8,11 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
 
 /**
  * Created by James on 3/15/2015.
@@ -26,11 +24,9 @@ public class GameScreen implements Screen {
 
 	private OrthographicCamera camera;
 
-	private Stage stage;
-
 	private TextureAtlas playerShipAtlas;
 	private TextureRegion playerShipImage;
-	private Actor playerShip;
+	private Rectangle playerShip;
 	private Vector2 playerShipPosition = new Vector2();
 	private Vector2 playerShipVelocity = new Vector2();
 	private Vector2 playerShipDirection = new Vector2();
@@ -45,11 +41,15 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 
-		stage = new Stage(new StretchViewport(800, 480));
-		Gdx.input.setInputProcessor(stage);
-
 		playerShipAtlas = new TextureAtlas(Gdx.files.internal("SpaceAssaultPlayer.pack"));
 		playerShipImage = playerShipAtlas.findRegion("playerShip3_blue");
+
+		playerShip = new Rectangle();
+		playerShip.width = playerShipImage.getRegionWidth();
+		playerShip.height = playerShipImage.getRegionHeight();
+		playerShip.x = (800 - 98) / 2;
+		playerShip.y = 75 / 2;
+		/*
 		playerShip = new Actor() {
 			@Override
 			public void draw(Batch batch, float parentAlpha) {
@@ -84,11 +84,11 @@ public class GameScreen implements Screen {
 		playerShip.setPosition((Gdx.graphics.getWidth() - playerShip.getWidth()) / 2, (Gdx.graphics.getHeight() - playerShip.getHeight()) / 2);
 
 		stage.addActor(playerShip);
+		*/
 	}
 
 	@Override
 	public void dispose() {
-		stage.dispose();
 		playerShipAtlas.dispose();
 	}
 
@@ -107,12 +107,10 @@ public class GameScreen implements Screen {
 		if (Gdx.input.isTouched()) {
 			lastTouchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(lastTouchPosition);
-			//playerShip.setX(MathUtils.clamp(lastTouchPosition.x - playerShip.getWidth() / 2, 0, 800 - (playerShip.getWidth())));
-			//playerShip.setY(MathUtils.clamp(lastTouchPosition.y - playerShip.getHeight() / 2, 0, 480 - playerShip.getHeight()));
+			playerShip.setX(MathUtils.clamp(lastTouchPosition.x - playerShip.getWidth() / 2, 0, 800 - (playerShip.getWidth())));
+			playerShip.setY(MathUtils.clamp(lastTouchPosition.y - playerShip.getHeight() / 2, 0, 480 - playerShip.getHeight()));
 			Gdx.app.log(TAG, "Touch: <" + lastTouchPosition.x + "," + lastTouchPosition.y + ">");
 			Gdx.app.log(TAG, "Ship: <" + playerShip.getX() + "," + playerShip.getY() + ">");
-			stage.act(Gdx.graphics.getDeltaTime());
-			stage.draw();
 		}
 	}
 
@@ -123,7 +121,6 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void hide() {
-		stage.dispose();
 	}
 
 	@Override
@@ -136,6 +133,5 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		stage.getViewport().update(width, height);
 	}
 }
