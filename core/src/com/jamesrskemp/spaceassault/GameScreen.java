@@ -47,7 +47,7 @@ public class GameScreen implements Screen {
 
 	@Override
 	public void dispose() {
-
+		playerShipAtlas.dispose();
 	}
 
 	@Override
