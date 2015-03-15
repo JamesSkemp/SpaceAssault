@@ -1,0 +1,89 @@
+
+SpaceAssaultPlayer.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+playerShip2_blue
+  rotate: false
+  xy: 1, 155
+  size: 112, 75
+  orig: 112, 75
+  offset: 0, 0
+  index: -1
+playerShip2_green
+  rotate: false
+  xy: 1, 78
+  size: 112, 75
+  orig: 112, 75
+  offset: 0, 0
+  index: -1
+playerShip2_orange
+  rotate: false
+  xy: 115, 155
+  size: 112, 75
+  orig: 112, 75
+  offset: 0, 0
+  index: -1
+playerShip2_red
+  rotate: false
+  xy: 1, 1
+  size: 112, 75
+  orig: 112, 75
+  offset: 0, 0
+  index: -1
+playerShip1_blue
+  rotate: false
+  xy: 115, 78
+  size: 99, 75
+  orig: 99, 75
+  offset: 0, 0
+  index: -1
+playerShip1_green
+  rotate: false
+  xy: 229, 155
+  size: 99, 75
+  orig: 99, 75
+  offset: 0, 0
+  index: -1
+playerShip1_orange
+  rotate: false
+  xy: 115, 1
+  size: 99, 75
+  orig: 99, 75
+  offset: 0, 0
+  index: -1
+playerShip1_red
+  rotate: false
+  xy: 216, 78
+  size: 99, 75
+  orig: 99, 75
+  offset: 0, 0
+  index: -1
+playerShip3_blue
+  rotate: false
+  xy: 330, 155
+  size: 98, 75
+  orig: 98, 75
+  offset: 0, 0
+  index: -1
+playerShip3_green
+  rotate: false
+  xy: 216, 1
+  size: 98, 75
+  orig: 98, 75
+  offset: 0, 0
+  index: -1
+playerShip3_orange
+  rotate: false
+  xy: 317, 78
+  size: 98, 75
+  orig: 98, 75
+  offset: 0, 0
+  index: -1
+playerShip3_red
+  rotate: false
+  xy: 316, 1
+  size: 98, 75
+  orig: 98, 75
+  offset: 0, 0
+  index: -1
