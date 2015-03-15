@@ -66,7 +66,7 @@ public class GameScreen implements Screen {
 			lastTouchPosition.set(Gdx.input.getX(), Gdx.input.getY(), 0);
 			camera.unproject(lastTouchPosition);
 			playerShip.x = MathUtils.clamp(lastTouchPosition.x - playerShip.width / 2, 0, 800 - (playerShip.width));
-			playerShip.y = lastTouchPosition.y - playerShip.height / 2;
+			playerShip.y = MathUtils.clamp(lastTouchPosition.y - playerShip.height / 2, 0, 480 - playerShip.height);
 			//Gdx.app.log(TAG, "Touch: <" + lastTouchPosition.x + "," + lastTouchPosition.y + ">");
 			//Gdx.app.log(TAG, "Ship: <" + playerShip.x + "," + playerShip.y + ">");
 		}
