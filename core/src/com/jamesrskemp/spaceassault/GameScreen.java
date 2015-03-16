@@ -32,6 +32,7 @@ public class GameScreen implements Screen {
 	private Vector2 playerShipVelocity = new Vector2();
 	private Vector2 playerShipDirection = new Vector2();
 	private Vector2 playerShipMovement = new Vector2();
+	private float playerShipDirectionAngle;
 	private float playerShipSpeed = 50f;
 	private boolean moveShip;
 
@@ -95,11 +96,18 @@ public class GameScreen implements Screen {
 
 		game.batch.setProjectionMatrix(camera.combined);
 		game.batch.begin();
-		game.batch.draw(playerShipImage, playerShip.getX(), playerShip.getY());
+		// TODO make this right; the rotation will go around the origin.x and origin.y.
+		game.batch.draw(playerShipImage,
+				playerShip.getX(), playerShip.getY(),
+				0, 0,
+				playerShip.width, playerShip.height,
+				1, 1, 0);
 		game.batch.end();
 
 		if (moveShip) {
 			playerShipPosition.set(playerShip.getX(), playerShip.getY());
+			playerShipDirectionAngle = playerShipNewPosition.angle(playerShipPosition);
+			Gdx.app.log(TAG, "Angle of direction: " + playerShipDirectionAngle);
 			playerShipDirection.set(playerShipNewPosition.x, playerShipNewPosition.y).sub(playerShipPosition).nor();
 			Gdx.app.log(TAG, "Ship direction: <" + playerShipDirection.x + "," + playerShipDirection.y + ">");
 
